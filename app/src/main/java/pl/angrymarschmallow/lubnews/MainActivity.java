@@ -3,6 +3,7 @@ package pl.angrymarschmallow.lubnews;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v4.content.CursorLoader;
 import android.content.Intent;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
     List<TagContent> array_list;
     private RecyclerView mRecyclerView;
     private SimpleCursorAdapter mCursorAdapter;
+    private DataBase dataBase;
 
 
     @Override
@@ -59,12 +61,11 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
             }
         });
 
-
+        dataBase = new DataBase(this);
 
 
         try {
-
-            array_list = new HttpAsyncTask().execute("http://briefler-bodolsog.rhcloud.com/api/test/").get();
+            array_list = new HttpAsyncTask().execute("http://briefler-bodolsog.rhcloud.com/api").get();
             List<String> array_string = new ArrayList<>();
 
             for(int i= 0; i < array_list.size() ; i++){
@@ -102,11 +103,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
         lv.setAdapter(mCursorAdapter);
     }
 
-    private void dodajWartosc(){
-        ContentValues wartosci = new ContentValues();
 
-
-    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -160,7 +157,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
 
                     JSONArray jsonNewsArray = parentArray.getJSONObject(j).getJSONArray("news_list");
                     List<TagContent.News_list> news_list = new ArrayList<>();
-                    ContentValues wartosci = new ContentValues();
                     for (int i = 0; i < jsonNewsArray.length(); i++) {
                         TagContent.News_list news = new TagContent.News_list();
                         news.setDescription(jsonNewsArray.getJSONObject(i).getString("description"));
@@ -168,13 +164,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
                         news.setUrl(jsonNewsArray.getJSONObject(i).getString("url"));
                         news_list.add(news);
 
-                        //Dodaje wartości do bazy
-                        wartosci.put(DataBase.KOLUMNA1, tag.getName());
-                        wartosci.put(DataBase.KOLUMNA2, news.getDescription());
-                        wartosci.put(DataBase.KOLUMNA3, news.getTitle());
-                        wartosci.put(DataBase.KOLUMNA4, news.getUrl());
-                        wartosci.put(DataBase.KOLUMNA5, 0);
-                        Uri uriNowego = getContentResolver().insert(DataValues.URI_ZAWARTOSCI, wartosci);
+                        dataBase.dodajWartosc(tag.getName(), news.getDescription(), news.getTitle(), news.getUrl(), "0");
                     }
                     tag.setNews_list(news_list);
                     tags.add(tag);

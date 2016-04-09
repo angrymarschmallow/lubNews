@@ -1,6 +1,8 @@
 package pl.angrymarschmallow.lubnews;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -47,5 +49,23 @@ public class DataBase extends SQLiteOpenHelper{
                 "VALUES( '" + name +"','"+ description +"','"+ url + "'," +readed +")";
 
 
+    }
+
+    public void dodajWartosc(String name, String descryption, String title, String url, String readed){
+        SQLiteDatabase dataBase = getWritableDatabase();
+                ContentValues wartosci = new ContentValues();
+                wartosci.put(KOLUMNA1, name);
+                wartosci.put(KOLUMNA2, descryption);
+                wartosci.put(KOLUMNA3, title);
+                wartosci.put(KOLUMNA4, url);
+                wartosci.put(KOLUMNA5, readed);
+        dataBase.insertOrThrow(NAZWA_TABELI, null, wartosci);
+    }
+
+    public Cursor dajWszystkie(){
+        String[] kolumny = {KOLUMNA1, KOLUMNA2, KOLUMNA3, KOLUMNA4, KOLUMNA5 };
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor kursor = database.query(NAZWA_TABELI, kolumny, null, null, null, null, null);
+        return kursor;
     }
 }

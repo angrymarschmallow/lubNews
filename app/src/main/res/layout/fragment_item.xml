@@ -85,11 +85,6 @@
                     android:layout_marginTop="5dp"
                     android:background="@drawable/rounded_corner"
                     android:padding="10dp" />
-            ​
-            ​
-            <ListView
-                    android:id="@+id/restaurant"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent" />
+
         </ListView>
 </LinearLayout>
