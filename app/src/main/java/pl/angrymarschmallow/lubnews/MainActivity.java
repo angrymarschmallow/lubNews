@@ -3,6 +3,7 @@ package pl.angrymarschmallow.lubnews;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.net.Uri;
 import android.support.v4.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
@@ -85,11 +86,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
             e.printStackTrace();
         }
 
-
-
-
-
-
 //        Intent intent = new Intent(this, Main22Activity.class);
 //        startActivity(intent);
     }
@@ -164,16 +160,25 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
 
                     JSONArray jsonNewsArray = parentArray.getJSONObject(j).getJSONArray("news_list");
                     List<TagContent.News_list> news_list = new ArrayList<>();
-
+                    ContentValues wartosci = new ContentValues();
                     for (int i = 0; i < jsonNewsArray.length(); i++) {
                         TagContent.News_list news = new TagContent.News_list();
                         news.setDescription(jsonNewsArray.getJSONObject(i).getString("description"));
                         news.setTitle(jsonNewsArray.getJSONObject(i).getString("title"));
                         news.setUrl(jsonNewsArray.getJSONObject(i).getString("url"));
                         news_list.add(news);
+
+                        //Dodaje wartości do bazy
+                        wartosci.put(DataBase.KOLUMNA1, tag.getName());
+                        wartosci.put(DataBase.KOLUMNA2, news.getDescription());
+                        wartosci.put(DataBase.KOLUMNA3, news.getTitle());
+                        wartosci.put(DataBase.KOLUMNA4, news.getUrl());
+                        wartosci.put(DataBase.KOLUMNA5, 0);
+                        Uri uriNowego = getContentResolver().insert(DataValues.URI_ZAWARTOSCI, wartosci);
                     }
                     tag.setNews_list(news_list);
                     tags.add(tag);
+
                 }
 
                 return tags;
