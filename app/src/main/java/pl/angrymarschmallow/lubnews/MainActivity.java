@@ -1,13 +1,24 @@
 package pl.angrymarschmallow.lubnews;
 
+import android.app.Activity;
+import android.content.ContentValues;
+import android.content.Context;
+import android.support.v4.content.CursorLoader;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CursorAdapter;
 import android.widget.ListView;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,10 +32,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class MainActivity extends AppCompatActivity {
+import static android.os.Parcelable.PARCELABLE_WRITE_RETURN_VALUE;
+
+public class MainActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     ListView lv;
+    List<TagContent> array_list;
     private RecyclerView mRecyclerView;
+    private SimpleCursorAdapter mCursorAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         lv = (ListView) findViewById(R.id.listView);
+        wypelnijListe();
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
@@ -41,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        List<TagContent> array_list;
+
 
 
         try {
@@ -71,8 +88,47 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
 //        Intent intent = new Intent(this, Main22Activity.class);
 //        startActivity(intent);
+    }
+
+    private void wypelnijListe(){
+        getLoaderManager().initLoader(0, null, (android.app.LoaderManager.LoaderCallbacks<Cursor>) this);
+
+        String[] mapujZ = new String[] {DataBase.KOLUMNA1, DataBase.KOLUMNA2,DataBase.KOLUMNA3,DataBase.KOLUMNA4,DataBase.KOLUMNA5};
+        int[] mapujDo = new int[]{R.id.listView };
+
+        mCursorAdapter = new SimpleCursorAdapter(this,
+                R.layout.fragment_item, null, mapujZ, mapujDo, 0);
+
+        lv.setAdapter(mCursorAdapter);
+    }
+
+    private void dodajWartosc(){
+        ContentValues wartosci = new ContentValues();
+
+
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projekcja = {DataBase.KOLUMNA1, DataBase.KOLUMNA2,DataBase.KOLUMNA3,DataBase.KOLUMNA4,DataBase.KOLUMNA5};
+        CursorLoader cursorLoader = new CursorLoader(this ,DataValues.URI_ZAWARTOSCI, projekcja, null, null ,null);
+
+        return cursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mCursorAdapter.swapCursor(data);
+    }
+
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mCursorAdapter.swapCursor(null);
     }
 
     private class HttpAsyncTask extends AsyncTask<String, Void, List<TagContent>> {

@@ -22,11 +22,6 @@
                 android:label="@string/title_activity_main22"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity
-                android:name=".RecyclerViewActivity"
-                android:label="@string/title_activity_recycler_view"
-                android:theme="@style/AppTheme.NoActionBar">
-        </activity>
         <provider
             android:authorities="pl.angrymarschmallow.lubnews.DataValues"
             android:name="DataValues"
