@@ -62,42 +62,28 @@ public class MainActivity extends AppCompatActivity{
         dataBase = new DataBase(this);
 
 
-        try {
-            int opcja = 1;
-            if(dataBase.getWszystkie() == null)
-                new HttpAsyncTask().execute("http://briefler-bodolsog.rhcloud.com/api/2016-04-09/", opcja+"").get();
+        int opcja = 2;
+        new HttpAsyncTask().execute("http://briefler-bodolsog.rhcloud.com/api/2016-04-09/", opcja+"");
 
-            final Cursor cursor = dataBase.getWszystkie();
-            //lv.setText(cursor.getCount()+"");
+        Cursor cursor = dataBase.getWszystkie();
+        //lv.setText(cursor.getCount()+"");
 
-            mDataSet = new ArrayList<>(); //cursor.getCount()][];
-            int licznik = 0;
+        mDataSet = new ArrayList<>(); //cursor.getCount()][];
 
-            while(cursor.moveToNext()){
-                ArrayList<String> c = new ArrayList<String>();
-                    c.add(cursor.getString(0));
-                    c.add(cursor.getString(1));
-                    c.add(cursor.getString(2));
-                    c.add(cursor.getString(3));
-                    c.add(cursor.getString(4));
-                    c.add(cursor.getString(5));
-                    c.add(cursor.getString(6));
-                mDataSet.add(c);
-
-
-
-                licznik++;
-            }
-
-
-
-            //lv.setAdapter(arrayAdapter);
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        while(cursor.moveToNext()){
+            ArrayList<String> c = new ArrayList<String>();
+                c.add(cursor.getString(0));
+                c.add(cursor.getString(1));
+                c.add(cursor.getString(2));
+                c.add(cursor.getString(3));
+                c.add(cursor.getString(4));
+                c.add(cursor.getString(5));
+                c.add(cursor.getString(6));
+            mDataSet.add(c);
         }
+
+
+        //lv.setAdapter(arrayAdapter);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         mAdapter = new MyAdapter(mDataSet);
@@ -138,7 +124,7 @@ public class MainActivity extends AppCompatActivity{
                 String month = parentObject.getString("month");
                 String year = parentObject.getString("year");
 
-                if (params[1] == "1") {
+                if (params[1].equals("1")) {
                     int tag_id = jsonObject.getInt("tag_id");
                     String tag_name = jsonObject.getString("tag_name");
 
@@ -147,12 +133,12 @@ public class MainActivity extends AppCompatActivity{
                     for (int i = 0; i < jsonNewsArray.length(); i++) {
                         String desc = jsonNewsArray.getJSONObject(i).getString("desc");
                         String img = jsonNewsArray.getJSONObject(i).getString("img");
-                        JSONObject source = jsonNewsArray.getJSONObject(i).getJSONObject("suorce");
+                        JSONObject source = jsonNewsArray.getJSONObject(i).getJSONObject("source");
                         String title = source.getString("name");
                         String url = source.getString("url");
                         dataBase.dodajTagWartosc(tag_id, day, month, year, tag_name, desc, title, url, "0");
                     }
-                } else if (params[1] == "2") {
+                } else if (params[1].equals("2")) {
 
                     parentObject = jsonObject.getJSONObject("tags");
 
@@ -162,7 +148,7 @@ public class MainActivity extends AppCompatActivity{
 
                         int id = jsonNewsArray.getJSONObject(i).getInt("id");
                         String tag = jsonNewsArray.getJSONObject(i).getString("tag");
-                        int weight = jsonNewsArray.getJSONObject(i).getInt("weight");
+                        String weight = jsonNewsArray.getJSONObject(i).getString("weight");
                         dataBase.dodajWartosc(id, day, month, year, tag, weight, "0");
                     }
                 }

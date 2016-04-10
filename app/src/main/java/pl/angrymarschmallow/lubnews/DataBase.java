@@ -13,7 +13,7 @@ public class DataBase extends SQLiteOpenHelper{
 
     public final static int WERSA_BAZY = 3;
 
-    public final static String NAZWA_BAZY = "lubBaza";
+    public final static String NAZWA_BAZY = "lubaza.db";
     public final static String NAZWA_TABELI = "components";
     public final static String ID = "_id";
     public final static String KOLUMNA1 = "day";
@@ -29,7 +29,7 @@ public class DataBase extends SQLiteOpenHelper{
             KOLUMNA2+ " TEXT NOT NULL, "+
             KOLUMNA3+ " TEXT NOT NULL, "+
             KOLUMNA4+ " TEXT NOT NULL, " +
-            KOLUMNA5+ " INTEGER NOT NULL, "+
+            KOLUMNA5+ " TEXT NOT NULL, "+
             KOLUMNA6+ " TEXT NOT NULL );";
 
     private static final String DROP_TODO_TABLE =
@@ -81,7 +81,7 @@ public class DataBase extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    public void dodajWartosc(int id,String day, String month, String year, String title,int weight, String readed){
+    public void dodajWartosc(int id,String day, String month, String year, String title,String weight, String readed){
         SQLiteDatabase dataBase = getWritableDatabase();
         ContentValues wartosci = new ContentValues();
         wartosci.put(ID, id);
