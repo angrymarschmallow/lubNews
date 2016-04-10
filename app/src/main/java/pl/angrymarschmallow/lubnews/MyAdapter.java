@@ -1,6 +1,7 @@
 package pl.angrymarschmallow.lubnews;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +39,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public MyAdapter(String[][] myDataset) {
-        mDataset = myDataset;
+        this.mDataset = myDataset;
     }
 
     // Create new views (invoked by the layout manager)
@@ -58,11 +59,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public void onBindViewHolder(MyViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.titleArticle.setText(mDataset[position][0]);
-        holder.timeArticle.setText(mDataset[position][1]);
-        holder.url.setText(mDataset[position][2]);
-        holder.categoryArticle.setText(mDataset[position][3]);
-        holder.description.setText(mDataset[position][4]);
+        String[][] mData = mDataset;
+        holder.titleArticle.setText(mData[position][0]);
+        holder.timeArticle.setText(mData[position][1]);
+        holder.url.setText(mData[position][2]);
+        holder.categoryArticle.setText(mData[position][3]);
+        holder.description.setText(mData[position][4]);
 
 
     }
@@ -70,6 +72,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
+        Log.d("wielkosc " , mDataset.length + "");
         return mDataset.length;
     }
 }

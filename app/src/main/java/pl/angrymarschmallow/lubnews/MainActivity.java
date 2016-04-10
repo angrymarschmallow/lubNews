@@ -69,11 +69,11 @@ public class MainActivity extends AppCompatActivity{
             Cursor cursor = dataBase.dajWszystkie();
             //lv.setText(cursor.getCount()+"");
 
-            mDataSet = new String[cursor.getCount()- 1][5];
+            mDataSet = new String[cursor.getCount()][];
             int licznik = 0;
 
             while(cursor.moveToNext()){
-
+                mDataSet[licznik] = new String[5];
                 mDataSet[licznik][0] = cursor.getString(0);
                 mDataSet[licznik][1] = cursor.getString(1);
                 mDataSet[licznik][2] = cursor.getString(2);
@@ -93,17 +93,10 @@ public class MainActivity extends AppCompatActivity{
         }
 
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
+        mAdapter = new MyAdapter(mDataSet);
+        mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(mDataSet);
         mRecyclerView.setAdapter(mAdapter);
 //        Intent intent = new Intent(this, Main22Activity.class);
 //        startActivity(intent);
