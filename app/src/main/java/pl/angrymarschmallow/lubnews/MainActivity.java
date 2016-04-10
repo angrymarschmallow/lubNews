@@ -17,6 +17,7 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -43,8 +44,6 @@ public class MainActivity extends AppCompatActivity{
 
     TextView lv;
     List<TagContent> array_list;
-    private RecyclerView mRecyclerView;
-    private SimpleCursorAdapter mCursorAdapter;
     private DataBase dataBase;
 
 
@@ -60,10 +59,9 @@ public class MainActivity extends AppCompatActivity{
 
         try {
             array_list = new HttpAsyncTask().execute("http://briefler-bodolsog.rhcloud.com/api/2016-04-09/").get();
-            List<String> array_string = new ArrayList<>();
 
             Cursor cursor = dataBase.dajWszystkie();
-            lv.setText(cursor.getColumnCount()+"");
+            lv.setText(cursor.getCount()+"");
 
 //            for(int i= 0; i < array_list.size() ; i++){
 //                array_string.add(array_list.get(i).getName());
@@ -113,26 +111,26 @@ public class MainActivity extends AppCompatActivity{
                 data = buffer.toString();
                 JSONObject jsonObject = new JSONObject(finalJson);
 
-                JSONArray parentArray = jsonObject.getJSONArray("tags");
-                for(int j =0;   j < parentArray.length(); j++) {
+                JSONObject parentObject = jsonObject.getJSONObject("tags");
+                //for(int j =0;   j < parentArray.length(); j++) {
                     TagContent tag = new TagContent();
 //                    tag.setName(parentArray.getJSONObject(j).getString("name"));
 //                    tag.setNews_count(parentArray.getJSONObject(j).getInt("news_count"));
 
-                    JSONArray jsonNewsArray = parentArray.getJSONObject(j).getJSONArray("news_list");
+                    JSONArray jsonNewsArray = parentObject.getJSONArray("tags_list");
                     List<TagContent.News_list> news_list = new ArrayList<>();
                     for (int i = 0; i < jsonNewsArray.length(); i++) {
                         TagContent.News_list news = new TagContent.News_list();
-                        news.setDescription(jsonNewsArray.getJSONObject(i).getString("id"));
+                        news.setDescription((jsonNewsArray.getJSONObject(i).getInt("id")+""));
                         news.setTitle(jsonNewsArray.getJSONObject(i).getString("tag"));
-                        news.setUrl(jsonNewsArray.getJSONObject(i).getString("weight"));
+                        news.setUrl(jsonNewsArray.getJSONObject(i).getInt("weight")+"");
                         news_list.add(news);
-
+                        Log.d("id: ", news.getDescription());
                         dataBase.dodajWartosc("name", news.getDescription(), news.getTitle(), news.getUrl(), "0");
                     }
                     tag.setNews_list(news_list);
                     tags.add(tag);
-                }
+                //}
 
                 return tags;
             }catch (Exception ex){

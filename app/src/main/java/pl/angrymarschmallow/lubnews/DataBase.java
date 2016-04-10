@@ -20,10 +20,10 @@ public class DataBase extends SQLiteOpenHelper{
     public final static String KOLUMNA3 = "title";
     public final static String KOLUMNA4 = "url";
     public final static String KOLUMNA5 = "readed";
-    public final static String TW_BAZY = "CREATE TABLE" + NAZWA_TABELI + "(" + ID+
-            "INTEGER PRIMARY KEY AUTOINCREMENT, "+ KOLUMNA1+ "TEXT NOT NULL, " + KOLUMNA2+
-            "TEXT NOT NULL, "+ KOLUMNA3 + "TEXT NOT NULL, "+ KOLUMNA4+ "TEXT NOT NULL, " +
-            KOLUMNA5+"BOOLEAN NOT NULL );";
+    public final static String TW_BAZY = "CREATE TABLE " + NAZWA_TABELI + "(" + ID+
+            " INTEGER PRIMARY KEY AUTOINCREMENT, "+ KOLUMNA1+ " TEXT NOT NULL, " + KOLUMNA2+
+            " TEXT NOT NULL, "+ KOLUMNA3 + " TEXT NOT NULL, "+ KOLUMNA4+ " TEXT NOT NULL, " +
+            KOLUMNA5+" BOOLEAN NOT NULL );";
 
 
 
