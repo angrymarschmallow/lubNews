@@ -16,6 +16,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -45,6 +46,10 @@ public class MainActivity extends AppCompatActivity{
     TextView lv;
     List<TagContent> array_list;
     private DataBase dataBase;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private String[][] mDataSet;
 
 
     @Override
@@ -52,29 +57,34 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        lv = (TextView) findViewById(R.id.textView);
+        //lv = (TextView) findViewById(R.id.textView);
 
         dataBase = new DataBase(this);
 
 
         try {
+            if(dataBase.dajWszystkie() == null)
             array_list = new HttpAsyncTask().execute("http://briefler-bodolsog.rhcloud.com/api/2016-04-09/").get();
 
             Cursor cursor = dataBase.dajWszystkie();
-            lv.setText(cursor.getCount()+"");
+            //lv.setText(cursor.getCount()+"");
 
-//            for(int i= 0; i < array_list.size() ; i++){
-//                array_string.add(array_list.get(i).getName());
-//            }
+            mDataSet = new String[cursor.getCount()- 1][5];
+            int licznik = 0;
 
-//
-//            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
-//                    this,
-//                    android.R.layout.simple_list_item_1,
-//                    array_string
-//            );
+            while(cursor.moveToNext()){
 
-//            lv.setAdapter(arrayAdapter);
+                mDataSet[licznik][0] = cursor.getString(0);
+                mDataSet[licznik][1] = cursor.getString(1);
+                mDataSet[licznik][2] = cursor.getString(2);
+                mDataSet[licznik][3] = cursor.getString(3);
+                mDataSet[licznik][4] = cursor.getString(4);
+                licznik++;
+            }
+
+
+
+            //lv.setAdapter(arrayAdapter);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -82,6 +92,19 @@ public class MainActivity extends AppCompatActivity{
             e.printStackTrace();
         }
 
+        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // specify an adapter (see also next example)
+        mAdapter = new MyAdapter(mDataSet);
+        mRecyclerView.setAdapter(mAdapter);
 //        Intent intent = new Intent(this, Main22Activity.class);
 //        startActivity(intent);
     }

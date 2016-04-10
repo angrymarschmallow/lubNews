@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DataBase extends SQLiteOpenHelper{
 
-    public final static int WERSA_BAZY = 1;
+    public final static int WERSA_BAZY = 2;
     public final static String ID = "_id";
     public final static String NAZWA_BAZY = "lubBaza";
     public final static String NAZWA_TABELI = "components";
@@ -24,6 +24,8 @@ public class DataBase extends SQLiteOpenHelper{
             " INTEGER PRIMARY KEY AUTOINCREMENT, "+ KOLUMNA1+ " TEXT NOT NULL, " + KOLUMNA2+
             " TEXT NOT NULL, "+ KOLUMNA3 + " TEXT NOT NULL, "+ KOLUMNA4+ " TEXT NOT NULL, " +
             KOLUMNA5+" BOOLEAN NOT NULL );";
+    private static final String DROP_TODO_TABLE =
+            "DROP TABLE IF EXISTS " + NAZWA_TABELI;
 
 
 
@@ -42,6 +44,9 @@ public class DataBase extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //TODO upgrade database
+        db.execSQL(DROP_TODO_TABLE);
+
+        onCreate(db);
     }
 
     public void dodajWartosc(String name, String descryption, String title, String url, String readed){
