@@ -1,6 +1,7 @@
 package pl.angrymarschmallow.lubnews;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,7 +33,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
         public TextView hashtagText;
 
 
-        public MyViewHolder(View view) {
+        public MyViewHolder(View view, final ArrayList<ArrayList<String>> mDataset) {
             super(view);
             element = (LinearLayout) view.findViewById(R.id.element);
             hashtag = (ImageView) view.findViewById(R.id.hashtag);
@@ -41,7 +42,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
             element.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "Item click nr: "+getLayoutPosition(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(v.getContext(), ArticleActivity.class);
+                    intent.putExtra("tag", mDataset.get(getLayoutPosition()).get(0)); //getLayoutPosition()
+                    v.getContext().startActivity(intent);
                 }
             });
         }
@@ -59,7 +62,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
         // create a new view
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_item, parent, false);
-        return new MyViewHolder(itemView);
+        return new MyViewHolder(itemView, mDataset);
     }
 
 
@@ -73,10 +76,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
 
         holder.hashtag.setImageResource(R.drawable.hashtag);
         holder.hashtagText.setText(mData.get(position).get(4));
-//        holder.timeArticle.setText(mData[position][1]);
-//        holder.url.setText(mData[position][2]);
-//        holder.categoryArticle.setText(mData[position][3]);
-//        holder.description.setText(mData[position][4]);
 
 
     }

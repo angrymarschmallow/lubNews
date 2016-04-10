@@ -1,14 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView
+
+<android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/list"
-        android:name="pl.angrymarschmallow.lubnews.ItemFragment"
+        android:id="@+id/card_view"
+        android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        app:layoutManager="LinearLayoutManager"
-        tools:context="pl.angrymarschmallow.lubnews.ItemFragment"
-        tools:listitem="@layout/fragment_item"/>
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="5dp"
+        android:layout_marginBottom="5dp">​
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tytuł Artykuł"
+            android:id="@+id/titleArticle"
+            android:textColor="#ccc"
+            android:textSize="20dp"
+            android:background="@drawable/rounded_corner" />
+    ​
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal">
+        ​
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Data"
+                android:id="@+id/timeArticle"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_corner"
+                android:textAlignment="center"
+                android:autoText="false" />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Url"
+                android:id="@+id/url"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_corner"
+                android:textAlignment="center"
+                android:autoText="false"/>
+        ​
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kategoria"
+                android:id="@+id/categoryArticle"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_corner"
+                android:textAlignment="center"
+                android:autoText="false" />
+        ​
+    </LinearLayout>
+    ​
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/description"
+            android:background="@drawable/rounded_corner"/>
+
+</android.support.v7.widget.CardView>

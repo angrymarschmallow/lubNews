@@ -38,58 +38,7 @@
 
 
             ​<!--
-            <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Tytuł Artykuł"
-                    android:id="@+id/titleArticle"
-                    android:textColor="#ccc"
-                    android:textSize="20dp"
-                    android:background="@drawable/rounded_corner" />
-            ​
-            <LinearLayout android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:orientation="horizontal">
-                ​
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Data"
-                        android:id="@+id/timeArticle"
-                        android:layout_weight="1"
-                        android:background="@drawable/rounded_corner"
-                        android:textAlignment="center"
-                        android:autoText="false" />
 
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Url"
-                        android:id="@+id/url"
-                        android:layout_weight="1"
-                        android:background="@drawable/rounded_corner"
-                        android:textAlignment="center"
-                        android:autoText="false"/>
-                ​
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Kategoria"
-                        android:id="@+id/categoryArticle"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_weight="1"
-                        android:background="@drawable/rounded_corner"
-                        android:textAlignment="center"
-                        android:autoText="false" />
-                ​
-            </LinearLayout>
-            ​
-            <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:id="@+id/description"
-                    android:background="@drawable/rounded_corner"/>
 -->
 
 </LinearLayout>
