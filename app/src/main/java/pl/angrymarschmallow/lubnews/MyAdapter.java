@@ -1,19 +1,25 @@
 package pl.angrymarschmallow.lubnews;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.*;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Created by Mazek27 on 2016-04-10.
  */
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
-    private String[][] mDataset;
+public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
+    public ArrayList<ArrayList<String>> mDataset;
+
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -21,24 +27,28 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         //public TextView mTextView;
-        public TextView titleArticle;
-        public TextView timeArticle;
-        public TextView url;
-        public TextView categoryArticle;
-        public TextView description;
+        public LinearLayout element;
+        public ImageView hashtag;
+        public TextView hashtagText;
+
 
         public MyViewHolder(View view) {
             super(view);
-            titleArticle = (TextView) view.findViewById(R.id.titleArticle);
-            timeArticle = (TextView) view.findViewById(R.id.timeArticle);
-            url = (TextView) view.findViewById(R.id.url);
-            categoryArticle = (TextView) view.findViewById(R.id.categoryArticle);
-            description = (TextView) view.findViewById(R.id.description);
+            element = (LinearLayout) view.findViewById(R.id.element);
+            hashtag = (ImageView) view.findViewById(R.id.hashtag);
+            hashtagText = (TextView) view.findViewById(R.id.hashtagText);
+
+            element.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(v.getContext(), "Item click nr: "+getLayoutPosition(), Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(String[][] myDataset) {
+    public MyAdapter(ArrayList<ArrayList<String>> myDataset) {
         this.mDataset = myDataset;
     }
 
@@ -59,12 +69,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public void onBindViewHolder(MyViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        String[][] mData = mDataset;
-        holder.titleArticle.setText(mData[position][0]);
-        holder.timeArticle.setText(mData[position][1]);
-        holder.url.setText(mData[position][2]);
-        holder.categoryArticle.setText(mData[position][3]);
-        holder.description.setText(mData[position][4]);
+        ArrayList<ArrayList<String>> mData = mDataset;
+
+        holder.hashtag.setImageResource(R.drawable.hashtag);
+        holder.hashtagText.setText(mData.get(position).get(4));
+//        holder.timeArticle.setText(mData[position][1]);
+//        holder.url.setText(mData[position][2]);
+//        holder.categoryArticle.setText(mData[position][3]);
+//        holder.description.setText(mData[position][4]);
 
 
     }
@@ -72,7 +84,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        Log.d("wielkosc " , mDataset.length + "");
-        return mDataset.length;
+        Log.d("wielkosc " , mDataset.size() + "");
+        return mDataset.size();
     }
 }

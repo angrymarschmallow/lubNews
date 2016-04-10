@@ -1,25 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+<android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/card_view"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="5dp"
+        android:layout_marginBottom="5dp">​
+-->
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
-        android:orientation="vertical"
-        >           ​
-            ​
+        android:orientation="horizontal"
+        android:id="@+id/element"
+        >
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/hashtag"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+        />
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/hashtagText"
+                android:textAlignment="center"
+                android:textSize="30dp"
+        />
+
+
+            ​<!--
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Tytuł Artykuł"
                     android:id="@+id/titleArticle"
-                    android:textColor="#000"
+                    android:textColor="#ccc"
                     android:textSize="20dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/rounded_corner"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="2dp"
-                    android:paddingLeft="15dp" />
+                    android:background="@drawable/rounded_corner" />
             ​
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content"
@@ -33,10 +59,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/rounded_corner"
                         android:textAlignment="center"
-                        android:autoText="false"
-                        android:layout_marginRight="5dp"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp" />
+                        android:autoText="false" />
 
                 <TextView
                         android:layout_width="wrap_content"
@@ -46,10 +69,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/rounded_corner"
                         android:textAlignment="center"
-                        android:autoText="false"
-                        android:layout_marginRight="5dp"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp" />
+                        android:autoText="false"/>
                 ​
                 <TextView
                         android:layout_width="wrap_content"
@@ -60,9 +80,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/rounded_corner"
                         android:textAlignment="center"
-                        android:autoText="false"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp" />
+                        android:autoText="false" />
                 ​
             </LinearLayout>
             ​
@@ -71,8 +89,11 @@
                     android:layout_height="wrap_content"
                     android:text=""
                     android:id="@+id/description"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/rounded_corner"
-                    android:padding="10dp" />
+                    android:background="@drawable/rounded_corner"/>
+-->
+
 </LinearLayout>
+
+<!--
+</android.support.v7.widget.CardView>
+-->

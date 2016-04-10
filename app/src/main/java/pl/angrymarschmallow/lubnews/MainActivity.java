@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity{
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private String[][] mDataSet;
+    private ArrayList<ArrayList<String>> mDataSet;
 
 
     @Override
@@ -63,22 +63,29 @@ public class MainActivity extends AppCompatActivity{
 
 
         try {
-            if(dataBase.dajWszystkie() == null)
-            array_list = new HttpAsyncTask().execute("http://briefler-bodolsog.rhcloud.com/api/2016-04-09/").get();
+            int opcja = 1;
+            if(dataBase.getWszystkie() == null)
+                new HttpAsyncTask().execute("http://briefler-bodolsog.rhcloud.com/api/2016-04-09/", opcja+"").get();
 
-            Cursor cursor = dataBase.dajWszystkie();
+            final Cursor cursor = dataBase.getWszystkie();
             //lv.setText(cursor.getCount()+"");
 
-            mDataSet = new String[cursor.getCount()][];
+            mDataSet = new ArrayList<>(); //cursor.getCount()][];
             int licznik = 0;
 
             while(cursor.moveToNext()){
-                mDataSet[licznik] = new String[5];
-                mDataSet[licznik][0] = cursor.getString(0);
-                mDataSet[licznik][1] = cursor.getString(1);
-                mDataSet[licznik][2] = cursor.getString(2);
-                mDataSet[licznik][3] = cursor.getString(3);
-                mDataSet[licznik][4] = cursor.getString(4);
+                ArrayList<String> c = new ArrayList<String>();
+                    c.add(cursor.getString(0));
+                    c.add(cursor.getString(1));
+                    c.add(cursor.getString(2));
+                    c.add(cursor.getString(3));
+                    c.add(cursor.getString(4));
+                    c.add(cursor.getString(5));
+                    c.add(cursor.getString(6));
+                mDataSet.add(c);
+
+
+
                 licznik++;
             }
 
@@ -102,64 +109,71 @@ public class MainActivity extends AppCompatActivity{
 //        startActivity(intent);
     }
 
-    private class HttpAsyncTask extends AsyncTask<String, Void, List<TagContent>> {
+    private class HttpAsyncTask extends AsyncTask<String, Void, Void> {
         String data;
         @Override
-        protected List<TagContent> doInBackground(String... params) {
+        protected Void doInBackground(String... params) {
             HttpURLConnection connection = null;
             BufferedReader reader = null;
 
-            try{
+            try {
                 URL link = new URL(params[0]);
-                connection = (HttpURLConnection)  link.openConnection();
+                connection = (HttpURLConnection) link.openConnection();
                 connection.connect();
                 InputStream stream = connection.getInputStream();
                 reader = new BufferedReader(new InputStreamReader(stream));
                 StringBuffer buffer = new StringBuffer();
-                String line ="";
+                String line = "";
 
-                while ((line = reader.readLine()) != null){
+                while ((line = reader.readLine()) != null) {
                     buffer.append(line);
                 }
-                List<TagContent> tags = new ArrayList<>();
 
                 String finalJson = buffer.toString();
-                data = buffer.toString();
+
                 JSONObject jsonObject = new JSONObject(finalJson);
 
-                JSONObject parentObject = jsonObject.getJSONObject("tags");
-                //for(int j =0;   j < parentArray.length(); j++) {
-                    TagContent tag = new TagContent();
-//                    tag.setName(parentArray.getJSONObject(j).getString("name"));
-//                    tag.setNews_count(parentArray.getJSONObject(j).getInt("news_count"));
+                JSONObject parentObject = jsonObject.getJSONObject("date_split");
+                String day = parentObject.getString("day");
+                String month = parentObject.getString("month");
+                String year = parentObject.getString("year");
+
+                if (params[1] == "1") {
+                    int tag_id = jsonObject.getInt("tag_id");
+                    String tag_name = jsonObject.getString("tag_name");
+
+                    JSONArray jsonNewsArray = parentObject.getJSONArray("news_list");
+
+                    for (int i = 0; i < jsonNewsArray.length(); i++) {
+                        String desc = jsonNewsArray.getJSONObject(i).getString("desc");
+                        String img = jsonNewsArray.getJSONObject(i).getString("img");
+                        JSONObject source = jsonNewsArray.getJSONObject(i).getJSONObject("suorce");
+                        String title = source.getString("name");
+                        String url = source.getString("url");
+                        dataBase.dodajTagWartosc(tag_id, day, month, year, tag_name, desc, title, url, "0");
+                    }
+                } else if (params[1] == "2") {
+
+                    parentObject = jsonObject.getJSONObject("tags");
 
                     JSONArray jsonNewsArray = parentObject.getJSONArray("tags_list");
-                    List<TagContent.News_list> news_list = new ArrayList<>();
-                    for (int i = 0; i < jsonNewsArray.length(); i++) {
-                        TagContent.News_list news = new TagContent.News_list();
-                        news.setDescription((jsonNewsArray.getJSONObject(i).getInt("id")+""));
-                        news.setTitle(jsonNewsArray.getJSONObject(i).getString("tag"));
-                        news.setUrl(jsonNewsArray.getJSONObject(i).getInt("weight")+"");
-                        news_list.add(news);
-                        Log.d("id: ", news.getDescription());
-                        dataBase.dodajWartosc("name", news.getDescription(), news.getTitle(), news.getUrl(), "0");
-                    }
-                    tag.setNews_list(news_list);
-                    tags.add(tag);
-                //}
 
-                return tags;
-            }catch (Exception ex){
+                    for (int i = 0; i < jsonNewsArray.length(); i++) {
+
+                        int id = jsonNewsArray.getJSONObject(i).getInt("id");
+                        String tag = jsonNewsArray.getJSONObject(i).getString("tag");
+                        int weight = jsonNewsArray.getJSONObject(i).getInt("weight");
+                        dataBase.dodajWartosc(id, day, month, year, tag, weight, "0");
+                    }
+                }
+            } catch (Exception ex) {
                 ex.printStackTrace();
-            }finally {
+            } finally {
                 if (connection != null) connection.disconnect();
             }
             return null;
         }
-
-        @Override
-        protected void onPostExecute(List<TagContent> result) {
-            super.onPostExecute(result);
-        }
     }
+
+
 }
