@@ -34,6 +34,7 @@ public class DataBase extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         //TODO create database
+
         db.execSQL(TW_BAZY);
 
     }
@@ -41,14 +42,6 @@ public class DataBase extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //TODO upgrade database
-    }
-
-    public static String INSERT(String name, String description, String title, String url, int readed ){
-        return "INSERT INTO "+NAZWA_TABELI+
-                "(" + KOLUMNA1 + ","+ KOLUMNA2 + ","+ KOLUMNA3 + ","+ KOLUMNA4 + ","+ KOLUMNA5 + ") "+
-                "VALUES( '" + name +"','"+ description +"','"+ url + "'," +readed +")";
-
-
     }
 
     public void dodajWartosc(String name, String descryption, String title, String url, String readed){

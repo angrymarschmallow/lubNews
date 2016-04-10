@@ -21,7 +21,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -36,9 +39,9 @@ import java.util.concurrent.ExecutionException;
 
 import static android.os.Parcelable.PARCELABLE_WRITE_RETURN_VALUE;
 
-public class MainActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class MainActivity extends AppCompatActivity{
 
-    ListView lv;
+    TextView lv;
     List<TagContent> array_list;
     private RecyclerView mRecyclerView;
     private SimpleCursorAdapter mCursorAdapter;
@@ -50,36 +53,30 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        lv = (ListView) findViewById(R.id.listView);
-        wypelnijListe();
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), Main22Activity.class);
-                startActivity(intent);
-            }
-        });
+        lv = (TextView) findViewById(R.id.textView);
 
         dataBase = new DataBase(this);
 
 
         try {
-            array_list = new HttpAsyncTask().execute("http://briefler-bodolsog.rhcloud.com/api").get();
+            array_list = new HttpAsyncTask().execute("http://briefler-bodolsog.rhcloud.com/api/2016-04-09/").get();
             List<String> array_string = new ArrayList<>();
 
-            for(int i= 0; i < array_list.size() ; i++){
-                array_string.add(array_list.get(i).getName());
-            }
+            Cursor cursor = dataBase.dajWszystkie();
+            lv.setText(cursor.getColumnCount()+"");
 
+//            for(int i= 0; i < array_list.size() ; i++){
+//                array_string.add(array_list.get(i).getName());
+//            }
 
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
-                    this,
-                    android.R.layout.simple_list_item_1,
-                    array_string
-            );
+//
+//            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
+//                    this,
+//                    android.R.layout.simple_list_item_1,
+//                    array_string
+//            );
 
-            lv.setAdapter(arrayAdapter);
+//            lv.setAdapter(arrayAdapter);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -89,39 +86,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
 
 //        Intent intent = new Intent(this, Main22Activity.class);
 //        startActivity(intent);
-    }
-
-    private void wypelnijListe(){
-        getLoaderManager().initLoader(0, null, (android.app.LoaderManager.LoaderCallbacks<Cursor>) this);
-
-        String[] mapujZ = new String[] {DataBase.KOLUMNA1, DataBase.KOLUMNA2,DataBase.KOLUMNA3,DataBase.KOLUMNA4,DataBase.KOLUMNA5};
-        int[] mapujDo = new int[]{R.id.listView };
-
-        mCursorAdapter = new SimpleCursorAdapter(this,
-                R.layout.fragment_item, null, mapujZ, mapujDo, 0);
-
-        lv.setAdapter(mCursorAdapter);
-    }
-
-
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] projekcja = {DataBase.KOLUMNA1, DataBase.KOLUMNA2,DataBase.KOLUMNA3,DataBase.KOLUMNA4,DataBase.KOLUMNA5};
-        CursorLoader cursorLoader = new CursorLoader(this ,DataValues.URI_ZAWARTOSCI, projekcja, null, null ,null);
-
-        return cursorLoader;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mCursorAdapter.swapCursor(data);
-    }
-
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        mCursorAdapter.swapCursor(null);
     }
 
     private class HttpAsyncTask extends AsyncTask<String, Void, List<TagContent>> {
@@ -152,23 +116,22 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
                 JSONArray parentArray = jsonObject.getJSONArray("tags");
                 for(int j =0;   j < parentArray.length(); j++) {
                     TagContent tag = new TagContent();
-                    tag.setName(parentArray.getJSONObject(j).getString("name"));
-                    tag.setNews_count(parentArray.getJSONObject(j).getInt("news_count"));
+//                    tag.setName(parentArray.getJSONObject(j).getString("name"));
+//                    tag.setNews_count(parentArray.getJSONObject(j).getInt("news_count"));
 
                     JSONArray jsonNewsArray = parentArray.getJSONObject(j).getJSONArray("news_list");
                     List<TagContent.News_list> news_list = new ArrayList<>();
                     for (int i = 0; i < jsonNewsArray.length(); i++) {
                         TagContent.News_list news = new TagContent.News_list();
-                        news.setDescription(jsonNewsArray.getJSONObject(i).getString("description"));
-                        news.setTitle(jsonNewsArray.getJSONObject(i).getString("title"));
-                        news.setUrl(jsonNewsArray.getJSONObject(i).getString("url"));
+                        news.setDescription(jsonNewsArray.getJSONObject(i).getString("id"));
+                        news.setTitle(jsonNewsArray.getJSONObject(i).getString("tag"));
+                        news.setUrl(jsonNewsArray.getJSONObject(i).getString("weight"));
                         news_list.add(news);
 
-                        dataBase.dodajWartosc(tag.getName(), news.getDescription(), news.getTitle(), news.getUrl(), "0");
+                        dataBase.dodajWartosc("name", news.getDescription(), news.getTitle(), news.getUrl(), "0");
                     }
                     tag.setNews_list(news_list);
                     tags.add(tag);
-
                 }
 
                 return tags;
